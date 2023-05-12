@@ -6,17 +6,24 @@ import { URLSearchParams } from 'node:url';
 import { parse as parseCookie } from 'cookie'; // https://www.npmjs.com/package/cookie
 import DB from './mydb.mjs';
 
-
-const 
+const
   port = 3333,
   server = createServer(serve(async (request, response) => {
     console.log((new Date()).toLocaleTimeString(), request.method, request.url, 'HTTP/' + request.httpVersion);
-    const 
+    let allPosts = await DB.getAllPosts();
+    const
       genFunction = getGenFunction(request),
-      postData = 'POST' === request.method ? await getAndParsePostBody(request) : null,  
+      postData = 'POST' === request.method ? await getAndParsePostBody(request) : null,
       cookies = parseCookie(request.headers.cookie || ''),
-      user = await getUser(cookies,postData,response);
-    if (genFunction) return genFunction({user});
+      user = await getUser(cookies, postData, response, allPosts);
+
+    
+    // console.log(allPosts);
+
+    // await addNewPost();
+
+    if (genFunction) return genFunction({ user, allPosts });
+
     send(response, 404, _404);
   }));
 server.listen(port, () => console.log('server start at http://localhost:' + port));
@@ -37,7 +44,7 @@ async function getAndParsePostBody(request) {
   return new URLSearchParams(body); //  🌟 применили интерфейс URLSearchParams() для POST form data
 }
 
-async function getUser(cookies, searchParams, response) { // получаем пользователя по cookies и данным html-формы
+async function getUser(cookies, searchParams, response, allPosts) { // получаем пользователя по cookies и данным html-формы
   let userId = null; // главное в этой функции
   if (Object.keys(cookies).length > 0) console.log('\t cookies: ', cookies);
 
@@ -50,16 +57,30 @@ async function getUser(cookies, searchParams, response) { // получаем п
     }
   }
   // ✔ ОБРАБОТЧИК ФОРМ !!! 
-  if (searchParams) { 
+  if (searchParams) {
     console.log(`\t form data: ${searchParams}`);
-    const 
+    const
       username = searchParams.get('username'),
       psw = searchParams.get('psw'),
+
+      title = searchParams.get('title'),
+      body = searchParams.get('body'),
+
       [id, secret] = await DB.loginUser(username, psw);
-      // console.log('if',username ,psw , id , secret);
-    if (username && psw && id && secret ) {
-      userId = id ,
-      response.setHeader('Set-Cookie',`uid=${secret}`);
+
+    if ('addpost' === searchParams.get('action')) {
+      let nextPostNumber = allPosts.length + 1;
+      const userId = await DB.getUserByCookie(cookies.uid);
+      if (title && body) {
+        await DB.addNewPost(userId, nextPostNumber, title, body);
+
+      }
+    }
+
+    // console.log('if',username ,psw , id , secret);
+    if (username && psw && id && secret) {
+      userId = id,
+        response.setHeader('Set-Cookie', `uid=${secret}`);
       // responseHeaders['Set-Cookie'] = [`uid=${UID}`];  // ✔ УСТАНАВЛИВАЕМ клиенту cookie
       console.log(`\t login! id = ${userId}`);
     }
@@ -67,12 +88,10 @@ async function getUser(cookies, searchParams, response) { // получаем п
       console.log(`\t logout! id=${userId}`);
       await DB.delOnlineUser(cookies.uid);
       userId = null;
-      response.setHeader('Set-Cookie',`uid=${cookies.uid};Max-Age=0`);
+      response.setHeader('Set-Cookie', `uid=${cookies.uid};Max-Age=0`);
       // responseHeaders['Set-Cookie'] = ['uid=;Max-Age=0']; // ✔ УДАЛЯЕМ cookie у клиента
     }
   }
   if (userId) return await DB.getUserData(userId);
   return null;
 }
-
-

@@ -20,7 +20,14 @@ const
     FROM sessions JOIN users ON users.id = sessions.userId 
     WHERE secret = ? `),
   deleteSessionQ = await connection.prepare('delete from sessions where secret=?'),
-  getAllPostsQ = await connection.prepare('SELECT posts.title, posts.body, posts.time, users.realname  from posts JOIN users ON users.id = posts.userId'),
+  getAllPostsQ = await connection.prepare('SELECT posts.title, posts.body, posts.time, users.realname from posts JOIN users ON users.id = posts.userId ORDER BY posts.time'),
+
+  addNewPostQ = await connection.prepare(`INSERT INTO myforum.posts (id) VALUES (?);`),
+  addNewPostDataQ = await connection.prepare(`UPDATE myforum.posts 
+  SET posts.userId = ?,
+  posts.title = ?,
+  posts.body = ?
+  WHERE  id = ?;`),
   DB = {
     async delOnlineUser(uid) { await deleteSessionQ.execute([uid]); },
 
@@ -30,10 +37,9 @@ const
       return users?.[0]?.id;
     },
 
-    async getUserData(id){
+    async getUserData(id) {
       const [users] = await getUserDataQ.execute([id]);
       return users?.[0];
-
     },
 
     async loginUser(login, pass) {
@@ -44,9 +50,9 @@ const
           secret = this.newUID();
         // console.log('loginUser',user.id,secret);
         await newSessionQ.execute([user.id, secret]);
-        return [user.id,secret];
+        return [user.id, secret];
       }
-      return [null,null];
+      return [null, null];
 
       // const testUser = this.accounts?.[login];
       // if (pass && testUser && pass === testUser?.pass) {
@@ -57,7 +63,17 @@ const
       // return false;
     },
 
-    newUID() { return ''+Math.random(); }
+    async getAllPosts() {
+      const [posts] = await getAllPostsQ.execute([]);
+      return posts;
+    },
+
+    async addNewPost(id, nextPostNumber, title, body) {
+      await addNewPostQ.execute([nextPostNumber]);
+      await addNewPostDataQ.execute([id, title, body, nextPostNumber]);
+    },
+
+    newUID() { return '' + Math.random(); }
   };
 
 export default DB;

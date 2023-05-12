@@ -1,0 +1,28 @@
+{
+  "name": "forum-for-users",
+  "version": "1.0.0",
+  "description": "forum-for-users",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node server.mjs"
+  },
+  "engines": {
+    "node": ">=18.11.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexIgn88/forum-for-users.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlexIgn88/forum-for-users/issues"
+  },
+  "homepage": "https://github.com/AlexIgn88/forum-for-users#readme",
+  "dependencies": {
+    "cookie": "^0.5.0",
+    "micro": "^10.0.1",
+    "mysql2": "^3.2.4",
+    "pug": "^3.0.2"
+  }
+}

@@ -6,18 +6,19 @@ import { URLSearchParams } from 'node:url';
 import { parse as parseCookie } from 'cookie'; // https://www.npmjs.com/package/cookie
 import DB from './mydb.mjs';
 
+
 const
   port = 3333,
   server = createServer(serve(async (request, response) => {
     console.log((new Date()).toLocaleTimeString(), request.method, request.url, 'HTTP/' + request.httpVersion);
     let allPosts = await DB.getAllPosts();
+      
     const
       genFunction = getGenFunction(request),
       postData = 'POST' === request.method ? await getAndParsePostBody(request) : null,
       cookies = parseCookie(request.headers.cookie || ''),
       user = await getUser(cookies, postData, response, allPosts);
 
-    
     // console.log(allPosts);
 
     // await addNewPost();
@@ -67,6 +68,13 @@ async function getUser(cookies, searchParams, response, allPosts) { // полу�
       body = searchParams.get('body'),
 
       [id, secret] = await DB.loginUser(username, psw);
+
+    if ('registration' === searchParams.get('action')) {
+      const newusername = searchParams.get('newusername');
+      const realname = searchParams.get('realname');
+      const newpsw = searchParams.get('newpsw');
+      await DB.addNewUser(newusername, realname, newpsw);
+    }
 
     if ('addpost' === searchParams.get('action')) {
       let nextPostNumber = allPosts.length + 1;

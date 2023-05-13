@@ -21,7 +21,7 @@ const
     // console.log(allPosts);
 
     // await addNewPost();
-
+    allPosts = await DB.getAllPosts();
     if (genFunction) return genFunction({ user, allPosts });
 
     send(response, 404, _404);

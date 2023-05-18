@@ -3,6 +3,7 @@ import { useRoute } from 'react-router5';
 import Nav from './components/Nav.js';
 import Forum from './components/Forum.js';
 import Login from './components/Login.js';
+import Registration from './components/registration.js';
 
 
 
@@ -27,6 +28,7 @@ export default function App() {
     <header className='flex flex-wrap justify-between items-start'>
       <Nav />
       <Login />
+      <Registration />
     </header>
     <main className='container mx-auto'><Main /></main>
     <footer></footer>

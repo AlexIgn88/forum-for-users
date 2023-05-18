@@ -86,11 +86,6 @@ async function getUser(cookies, postData, response) { // получаем пол
   if (postData) console.log(`\t\t form data: ${postData}`);
   switch (postData?.get('action')) {
     case 'registration':
-      // const newusername = postData.get('newusername'),
-      //   realname = postData.get('realname'),
-      //   newpsw = postData.get('newpsw');
-      // await DB.addNewUser(newusername, realname, newpsw);
-      // break;
       const
         newusername = postData.get('username'),
         realname = postData.get('realname'),

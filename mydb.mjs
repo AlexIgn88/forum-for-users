@@ -1,9 +1,16 @@
 import { createConnection } from 'mysql2/promise';
+import * as dotenv from 'dotenv'
+
+dotenv.config();
+// console.log(process.env.S3_BUCKET);
+// console.log(process.env.SECRET_KEY);
+
 
 const
   salt = 'mySuper%SecretSalt!*&^%$#', // TODO move to .env-file 
   // connection = await createConnection('mysql://user:111@192.168.100.4/myforum'),
   connection = await createConnection('mysql://user:111@localhost/myforum'),
+  // connection = await createConnection(`mysql://golddragon:${process.env.DB_PASS}@${process.env.DB_HOST}/myforum`),
 
   testUserQ = await connection.prepare(`
     SELECT id 

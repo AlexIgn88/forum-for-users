@@ -1,18 +1,17 @@
 extends _includes/layout.pug
 block append content
-  - allPosts ??=[]
+  - posts ??= []
   if user
     include  _includes/addpost
-  each post in allPosts
+  each post in posts
     article
-      div
-        span 
-          b= post.realname
-        span= ' '
-        span
-          i= post.time
-      div
       aside
-        h4= post.title
-        p= post.body
-      
+        div
+          sup= post.realname 
+          strong  #{post.title}           
+        samp= post.body
+        br    
+        small= post.time
+      p         
+        
+  

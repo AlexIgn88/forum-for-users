@@ -129,12 +129,12 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# Other
-/node_modules
-
-pnpm-lock.yaml
-
 # next.js
 /.next/
 .vscode/
 /out/
+
+# Other
+/node_modules
+pnpm-lock.yaml
+/_dest/

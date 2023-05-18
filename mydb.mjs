@@ -5,7 +5,6 @@ const
   // connection = await createConnection('mysql://user:111@192.168.100.4/myforum'),
   connection = await createConnection('mysql://user:111@localhost/myforum'),
 
-
   testUserQ = await connection.prepare(`
     SELECT id 
     FROM users   
@@ -35,9 +34,8 @@ const
   newPostQ = await connection.prepare(`
     INSERT INTO posts (title,body,userId) values(?,?,?)`),
 
-  allUsersQ = await connection.prepare(`SELECT id FROM users`),
   addNewUserQ = await connection.prepare(`
-  INSERT INTO myforum.users (id, login, psw, realname) VALUES (?,?,PASSWORD(CONCAT('${salt}',?)),?)`),
+  INSERT INTO myforum.users (login, psw, realname) VALUES (?,PASSWORD(CONCAT('${salt}',?)),?)`),
 
   DB = {
     async delOnlineUser(uid = null) { await deleteSessionQ.execute([uid]); },
@@ -82,13 +80,13 @@ const
       // console.log(args);
       await newPostQ.execute(args);
     },
-    
-    async addNewUser(newusername, realname, newpsw) {
-      const [users] = await allUsersQ.execute([]);
-      await addNewUserQ.execute([users.length + 1, newusername, newpsw, realname]);
+
+    /**
+    * @param argsNewUser {[newusername:string, newpsw:number, realname:string]}
+    */
+    async addNewUser(...argsNewUser) {
+      await addNewUserQ.execute([...argsNewUser]);
     },
   };
 
 export default DB;
-
-

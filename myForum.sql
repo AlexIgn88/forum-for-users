@@ -32,7 +32,7 @@ INSERT INTO `posts` (`id`, `userId`, `title`, `body`, `time`) VALUES
 	(20, 6, 'picnic', 'And we need some fire...', '2023-05-18 19:22:21'),
 	(21, 7, 'picnic', ' I can help light a fire', '2023-05-18 19:25:17');
 
--- Дамп данных таблицы myforum.sessions: ~13 rows (приблизительно)
+-- Дамп данных таблицы myforum.sessions: ~14 rows (приблизительно)
 INSERT INTO `sessions` (`id`, `userId`, `secret`) VALUES
 	(89, 1, '0.19856911643664477'),
 	(103, 1, '0.005295320692169314'),
@@ -49,7 +49,7 @@ INSERT INTO `sessions` (`id`, `userId`, `secret`) VALUES
 	(172, 1, '0.41902198160811177'),
 	(184, 1, '0.8998931385916289');
 
--- Дамп данных таблицы myforum.users: ~7 rows (приблизительно)
+-- Дамп данных таблицы myforum.users: ~9 rows (приблизительно)
 INSERT INTO `users` (`id`, `login`, `psw`, `realname`) VALUES
 	(1, 'user', '*7C2865310ECCDD62F5BCA98936223240F1E8C1A6', '👤USER'),
 	(2, 'admin', '*5B3BD82ACFE5938026B3001B2540B9C3EB242DD8', '👑ADMIN'),
@@ -57,7 +57,9 @@ INSERT INTO `users` (`id`, `login`, `psw`, `realname`) VALUES
 	(4, 'father', '*C4D0A94DE0F05EDE0A6DC893625B51B7C0BB5B56', 'father36'),
 	(5, 'lena', '*61FAB168C51EB055D886796F45907F39B0556F7A', 'Alenka'),
 	(6, 'anna', '*F6BF12F3D1B5A8E73F15AAEB0FB15682AD5A8DB0', 'Melisandra A.'),
-	(7, 'jon', '*7DC74F5CF4847D9BECA401984B23B78F6D2DCE02', 'Jon Snow');
+	(7, 'jon', '*7DC74F5CF4847D9BECA401984B23B78F6D2DCE02', 'Jon Snow'),
+	(8, 'max', '*168C8E16D27F6D08CD861A79F56C3F89E909BE6C', 'Max Payne'),
+	(9, 'igor', '*B4DD573F536B738BE58D5DA9B2EB3537BE831314', 'Igorek2077');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

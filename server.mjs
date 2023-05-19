@@ -90,7 +90,6 @@ async function getUser(cookies, postData, response) { // получаем пол
         newusername = postData.get('username'),
         realname = postData.get('realname'),
         newpsw = postData.get('psw');
-      // await DB.addNewUser(newusername, realname, newpsw);
       await DB.addNewUser(newusername, newpsw, realname);
     // break;
 
